@@ -1,42 +1,48 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>My first three.js app</title>
-		<style>
-			body { margin: 0; }
-		</style>
-		<script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@<version>/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@<version>/examples/jsm/"
+<head>
+  <meta charset="utf-8">
+  <title>My first three.js app</title>
+  <style>
+    body { margin: 0; }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@<version>/build/three.module.js",
+        "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@<version>/examples/jsm/"
+      }
     }
-  }
-</script>
-	</head>
-	<body>
-		<script type="module">
-			import * as THREE from 'https://cdn.jsdelivr.net/npm/three/build/three.module.js';
+  </script>
+</head>
+<body>
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three/build/three.module.js';
+    import { FontLoader } from 'https://cdn.jsdelivr.net/npm/three/examples/jsm/loaders/FontLoader.js';
+    import { TextGeometry } from 'https://cdn.jsdelivr.net/npm/three/examples/jsm/geometries/TextGeometry.js';
 
-			// Наш Javascript будет здесь..
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
-const loader = new FontLoader();
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 
-loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+    const loader = new FontLoader();
+    loader.load('https://threejs.org/fonts/helvetiker_regular.typeface.json', function (font) {
+      const geometry = new TextGeometry('Hello three.js!', { font: font, size: 1, height: 0.2 });
+      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      const textMesh = new THREE.Mesh(geometry, material);
+      scene.add(textMesh);
+      textMesh.position.set(-3, 0, -5); // Позиционируем текст
+    });
 
-	const geometry = new TextGeometry( 'Hello three.js!', {
-		font: font,
-		size: 80,
-		depth: 5,
-		curveSegments: 12,
-		bevelEnabled: true,
-		bevelThickness: 10,
-		bevelSize: 8,
-		bevelOffset: 0,
-		bevelSegments: 5
-	} );
-} );
-		</script>
-	</body>
+    camera.position.z = 5;
+
+    const animate = function () {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    };
+    animate();
+  </script>
+</body>
 </html>
