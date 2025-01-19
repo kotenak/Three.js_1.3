@@ -10,8 +10,12 @@
     </style>
 </head>
 <body>
+    <!-- Подключаем библиотеку Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/fonts/helvetiker_regular.typeface.json"></script>
+    <!-- Подключаем FontLoader для работы с текстом -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/loaders/FontLoader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/fonts/helvetiker_regular.typeface.json"></script>
+    
     <script>
         // Создаем сцену, камеру и рендерер
         const scene = new THREE.Scene();
