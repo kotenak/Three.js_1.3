@@ -1,56 +1,67 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <title>Сцена с текстом в Three.js</title>
-  <style>
-    body { margin: 0; }
-    canvas { display: block; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js Text Scene</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
 </head>
 <body>
-  <script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three/build/three.module.js';
-    import { FontLoader } from 'https://cdn.jsdelivr.net/npm/three/examples/jsm/loaders/FontLoader.js';
-    import { TextGeometry } from 'https://cdn.jsdelivr.net/npm/three/examples/jsm/geometries/TextGeometry.js';
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/fonts/helvetiker_regular.typeface.json"></script>
+    <script>
+        // Создаем сцену, камеру и рендерер
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
 
-    // Создаем сцену, камеру и рендерер
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+        // Добавляем освещение
+        const light = new THREE.AmbientLight(0xffffff); // мягкий белый свет
+        scene.add(light);
 
-    // Загрузка шрифта и создание текста
-    const loader = new FontLoader();
-    loader.load('https://three.js.org/fonts/helvetiker_regular.typeface.json', function (font) {
-      const geometry = new TextGeometry('Привет, Three.js!', {
-        font: font,
-        size: 1,
-        height: 0.2,
-        curveSegments: 12,
-      });
-      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-      const textMesh = new THREE.Mesh(geometry, material);
-      scene.add(textMesh);
-      textMesh.position.set(-3, 0, -5); // Позиционируем текст
-    });
+        // Загружаем шрифт и создаем текст
+        const loader = new THREE.FontLoader();
+        loader.load('https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+            const textGeometry = new THREE.TextGeometry('Привет, Three.js!', {
+                font: font,
+                size: 1,
+                height: 0.1,
+                curveSegments: 12,
+                bevelEnabled: true,
+                bevelThickness: 0.03,
+                bevelSize: 0.05,
+                bevelOffset: 0,
+                bevelSegments: 5
+            });
 
-    camera.position.z = 5;
+            const textMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+            const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+            textMesh.position.set(-3, 0, 0); // Позиционируем текст
+            scene.add(textMesh);
+        });
 
-    // Анимация
-    const animate = function () {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
-    };
-    animate();
+        // Устанавливаем позицию камеры
+        camera.position.z = 5;
 
-    // Обработка изменения размера окна
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-  </script>
+        // Анимация
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Обработка изменения размера окна
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
 </body>
 </html>
